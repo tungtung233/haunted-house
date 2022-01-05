@@ -25,6 +25,16 @@ const bricksRoughnessTexture = textureLoader.load(
   "/textures/bricks/roughness.jpg"
 );
 
+const doorColorTexture = textureLoader.load("/textures/door/color.jpg");
+const doorAlphaTexture = textureLoader.load("/textures/door/alpha.jpg");
+const doorAmbientOcclusionTexture = textureLoader.load(
+  "/textures/door/ambientOcclusion.jpg"
+);
+const doorHeightTexture = textureLoader.load("/textures/door/height.jpg");
+const doorNormalTexture = textureLoader.load("/textures/door/normal.jpg");
+const doorMetalnessTexture = textureLoader.load("/textures/door/metalness.jpg");
+const doorRoughnessTexture = textureLoader.load("/textures/door/roughness.jpg");
+
 // House
 const house = new THREE.Group();
 scene.add(house);
@@ -54,6 +64,29 @@ const roof = new THREE.Mesh(
 roof.position.y = 2.5 + 0.5; //adding the total height of the cube + the half the height of the roof
 roof.rotation.y = Math.PI / 4;
 house.add(roof);
+
+// Door
+const door = new THREE.Mesh(
+  new THREE.PlaneBufferGeometry(2.2, 2.2, 100, 100),
+  new THREE.MeshStandardMaterial({
+    map: doorColorTexture,
+    transparent: true,
+    alphaMap: doorAlphaTexture,
+    aoMap: doorAmbientOcclusionTexture,
+    displacementMap: doorHeightTexture,
+    displacementScale: 0.1,
+    normalMap: doorNormalTexture,
+    metalnessMap: doorMetalnessTexture,
+    roughnessMap: doorRoughnessTexture,
+  })
+);
+door.geometry.setAttribute(
+  "uv2",
+  new THREE.Float32BufferAttribute(door.geometry.attributes.uv.array, 2)
+);
+door.position.z = 2.01; //half of the cube width
+door.position.y = 1; //half of the plane height
+house.add(door);
 
 // Floor
 const floor = new THREE.Mesh(
