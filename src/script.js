@@ -68,8 +68,13 @@ let sprite1, sprite2;
 gltfLoader.load(
   'sprite.gltf', 
   (gltf) => {
-    gltf.scene.scale.set(0.03,0.03,0.03)
-    gltf.scene.children[0].material = new THREE.MeshStandardMaterial({color: 'pink'})
+    gltf.scene.scale.set(0.01,0.01,0.01)
+    gltf.scene.children[0].material = new THREE.MeshStandardMaterial({
+      color: '#fd7dff',
+      emissive: '#fd7dff',
+      transparent: true,
+      opacity: 0.6,
+    })
     gltf.scene.name = 'sprite1'
 
     scene.add(gltf.scene)
@@ -81,8 +86,13 @@ gltfLoader.load(
 gltfLoader.load(
   'sprite.gltf', 
   (gltf) => {
-    gltf.scene.scale.set(0.02,0.02,0.02)
-    gltf.scene.children[0].material = new THREE.MeshStandardMaterial({color: 'blue'})
+    gltf.scene.scale.set(0.01,0.01,0.01)
+    gltf.scene.children[0].material = new THREE.MeshStandardMaterial({
+      color: '#00ffff',
+      emissive: '#00ffff',
+      transparent: true,
+      opacity: 0.6,
+    })
     gltf.scene.name = 'sprite2'
 
     scene.add(gltf.scene)
@@ -220,6 +230,11 @@ gui.add(moonLight.position, 'y').min(- 5).max(5).step(0.001)
 gui.add(moonLight.position, 'z').min(- 5).max(5).step(0.001)
 scene.add(moonLight)
 
+// Sprite Lights
+const sprite1Light = new THREE.PointLight("#fc3dff", 3, 1.5);
+const sprite2Light = new THREE.PointLight("#00ffff", 3, 1.5);
+scene.add(sprite1Light, sprite2Light);
+
 // Door light
 const doorLight = new THREE.PointLight("#ff7d46", 1, 7);
 doorLight.position.set(0, 2.2, 2.7);
@@ -282,7 +297,8 @@ const tick = () => {
   const sprite1y = 0.2 + Math.abs(Math.cos(elapsedTime * 0.75)); // Math.cos will range from 1 to -1. Any number below 0 will result in the sprite going 'through' the floor - we want all numbers to be positive. Math.abs will take the absolute value (e.g. -5 => 5, -200 => 200)
 
   if (sprite1) {
-    sprite1.position.set(sprite1x, sprite1y, sprite1z)
+    sprite1.position.set(sprite1x, sprite1y, sprite1z);
+    sprite1Light.position.set(sprite1x, sprite1y, sprite1z);
   }
 
   const sprite2Angle = -elapsedTime * 0.3;
@@ -291,7 +307,8 @@ const tick = () => {
   const sprite2y = 0.2 + Math.abs(Math.sin(elapsedTime * 0.75));
 
   if (sprite2) {
-    sprite2.position.set(sprite2x, sprite2y, sprite2z)
+    sprite2.position.set(sprite2x, sprite2y, sprite2z);
+    sprite2Light.position.set(sprite2x, sprite2y, sprite2z);
   }
 
   // Update controls
