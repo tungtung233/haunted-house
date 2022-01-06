@@ -35,6 +35,31 @@ const doorNormalTexture = textureLoader.load("/textures/door/normal.jpg");
 const doorMetalnessTexture = textureLoader.load("/textures/door/metalness.jpg");
 const doorRoughnessTexture = textureLoader.load("/textures/door/roughness.jpg");
 
+const grassColorTexture = textureLoader.load("/textures/grass/color.jpg");
+const grassAmbientOcclusionTexture = textureLoader.load(
+  "/textures/grass/ambientOcclusion.jpg"
+);
+const grassNormalTexture = textureLoader.load("/textures/grass/normal.jpg");
+const grassRoughnessTexture = textureLoader.load(
+  "/textures/grass/roughness.jpg"
+);
+
+// have to actually tell the texture to repeat along the S and T axis (S/T === U/V)
+grassColorTexture.wrapS = THREE.RepeatWrapping;
+grassColorTexture.wrapT = THREE.RepeatWrapping;
+grassAmbientOcclusionTexture.wrapS = THREE.RepeatWrapping;
+grassAmbientOcclusionTexture.wrapT = THREE.RepeatWrapping;
+grassNormalTexture.wrapS = THREE.RepeatWrapping;
+grassNormalTexture.wrapT = THREE.RepeatWrapping;
+grassRoughnessTexture.wrapS = THREE.RepeatWrapping;
+grassRoughnessTexture.wrapT = THREE.RepeatWrapping;
+
+// '.repeat' is a vector2 - repeat it 9x9 times
+grassColorTexture.repeat.set(9, 9);
+grassAmbientOcclusionTexture.repeat.set(9, 9);
+grassNormalTexture.repeat.set(9, 9);
+grassRoughnessTexture.repeat.set(9, 9);
+
 // House
 const house = new THREE.Group();
 scene.add(house);
@@ -134,11 +159,20 @@ for (let i = 0; i < 50; i++) {
 // Floor
 const floor = new THREE.Mesh(
   new THREE.PlaneGeometry(20, 20),
-  new THREE.MeshStandardMaterial({ color: '#a9c388' })
-)
-floor.rotation.x = - Math.PI * 0.5
-floor.position.y = 0
-scene.add(floor)
+  new THREE.MeshStandardMaterial({
+    map: grassColorTexture,
+    aoMap: grassAmbientOcclusionTexture,
+    normalMap: grassNormalTexture,
+    roughnessMap: grassRoughnessTexture,
+  })
+);
+floor.geometry.setAttribute(
+  "uv2",
+  new THREE.Float32BufferAttribute(floor.geometry.attributes.uv.array, 2)
+);
+floor.rotation.x = -Math.PI * 0.5;
+floor.position.y = 0;
+scene.add(floor);
 
 // Lights
 // Ambient light
