@@ -64,7 +64,7 @@ grassRoughnessTexture.repeat.set(9, 9);
 // Models
 const gltfLoader = new GLTFLoader();
 
-let sprite1;
+let sprite1, sprite2;
 gltfLoader.load(
   'sprite.gltf', 
   (gltf) => {
@@ -75,6 +75,19 @@ gltfLoader.load(
     scene.add(gltf.scene)
 
     sprite1 = scene.getObjectByName("sprite1")
+  }
+)
+
+gltfLoader.load(
+  'sprite.gltf', 
+  (gltf) => {
+    gltf.scene.scale.set(0.02,0.02,0.02)
+    gltf.scene.children[0].material = new THREE.MeshStandardMaterial({color: 'blue'})
+    gltf.scene.name = 'sprite2'
+
+    scene.add(gltf.scene)
+
+    sprite2 = scene.getObjectByName("sprite2")
   }
 )
 
@@ -270,6 +283,15 @@ const tick = () => {
 
   if (sprite1) {
     sprite1.position.set(sprite1x, sprite1y, sprite1z)
+  }
+
+  const sprite2Angle = -elapsedTime * 0.3;
+  const sprite2x = Math.cos(sprite2Angle) * 4;
+  const sprite2z = Math.sin(sprite2Angle) * 4;
+  const sprite2y = 0.2 + Math.abs(Math.sin(elapsedTime * 0.75));
+
+  if (sprite2) {
+    sprite2.position.set(sprite2x, sprite2y, sprite2z)
   }
 
   // Update controls
