@@ -284,6 +284,35 @@ renderer.setClearColor("#262837");
 const fog = new THREE.Fog("#262837", 1, 15);
 scene.fog = fog;
 
+// Shadows
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+moonLight.castShadow = true;
+doorLight.castShadow = true;
+sprite1Light.castShadow = true;
+sprite2Light.castShadow = true;
+
+walls.castShadow = true;
+bush1.castShadow = true;
+bush2.castShadow = true;
+bush3.castShadow = true;
+bush4.castShadow = true;
+
+floor.receiveShadow = true;
+
+doorLight.shadow.mapSize.width = 256;
+doorLight.shadow.mapSize.height = 256;
+doorLight.shadow.camera.far = 7;
+
+sprite1Light.shadow.mapSize.width = 256;
+sprite1Light.shadow.mapSize.height = 256;
+sprite1Light.shadow.camera.far = 7;
+
+sprite2Light.shadow.mapSize.width = 256;
+sprite2Light.shadow.mapSize.height = 256;
+sprite2Light.shadow.camera.far = 7;
+
 // Animate
 const clock = new THREE.Clock()
 
