@@ -110,6 +110,27 @@ bush4.position.set(-1, 0.05, 2.6);
 
 house.add(bush1, bush2, bush3, bush4);
 
+// Graves
+const graves = new THREE.Group();
+scene.add(graves);
+
+const graveGeometry = new THREE.BoxBufferGeometry(0.6, 0.8, 0.2);
+const graveMaterial = new THREE.MeshStandardMaterial({ color: "#b2b6b1" });
+
+for (let i = 0; i < 50; i++) {
+  const angle = Math.random() * Math.PI * 2;
+  const radius = 4 + Math.random() * 5; //getting a number between 4 to 9 - not too close to the house, but not off the ground plane (walls = 4/2 = 2) (plane = 20/2 = 10)
+  const x = Math.sin(angle) * radius;
+  const z = Math.cos(angle) * radius;
+
+  const grave = new THREE.Mesh(graveGeometry, graveMaterial);
+  grave.position.set(x, 0.3, z);
+  grave.rotation.y = (Math.random() - 0.5) * 0.5;
+  grave.rotation.z = (Math.random() - 0.5) * 0.5;
+  grave.castShadow = true;
+  graves.add(grave);
+}
+
 // Floor
 const floor = new THREE.Mesh(
   new THREE.PlaneGeometry(20, 20),
