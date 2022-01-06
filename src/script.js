@@ -1,6 +1,7 @@
 import './style.css'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import * as dat from 'lil-gui'
 
 // Base
@@ -59,6 +60,23 @@ grassColorTexture.repeat.set(9, 9);
 grassAmbientOcclusionTexture.repeat.set(9, 9);
 grassNormalTexture.repeat.set(9, 9);
 grassRoughnessTexture.repeat.set(9, 9);
+
+// Models
+const gltfLoader = new GLTFLoader();
+
+let sprite1;
+gltfLoader.load(
+  'sprite.gltf', 
+  (gltf) => {
+    gltf.scene.scale.set(0.03,0.03,0.03)
+    gltf.scene.children[0].material = new THREE.MeshStandardMaterial({color: 'pink'})
+    gltf.scene.name = 'sprite1'
+
+    scene.add(gltf.scene)
+
+    sprite1 = scene.getObjectByName("sprite1")
+  }
+)
 
 // House
 const house = new THREE.Group();
@@ -243,6 +261,16 @@ const clock = new THREE.Clock()
 
 const tick = () => {
   const elapsedTime = clock.getElapsedTime()
+
+  // Update Sprites
+  const sprite1Angle = elapsedTime * 0.18;
+  const sprite1x = Math.cos(sprite1Angle) * (6 + Math.cos(elapsedTime * 1));
+  const sprite1z = Math.sin(sprite1Angle) * (6 + Math.cos(elapsedTime * 1));
+  const sprite1y = 0.2 + Math.abs(Math.cos(elapsedTime * 0.75)); // Math.cos will range from 1 to -1. Any number below 0 will result in the sprite going 'through' the floor - we want all numbers to be positive. Math.abs will take the absolute value (e.g. -5 => 5, -200 => 200)
+
+  if (sprite1) {
+    sprite1.position.set(sprite1x, sprite1y, sprite1z)
+  }
 
   // Update controls
   controls.update()
